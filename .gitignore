@@ -1,0 +1,6 @@
+*.sw*
+io/github/jbarber/*
+*.class
+libpbs.so
+pbs_wrap.o
+pbs_wrap.c
