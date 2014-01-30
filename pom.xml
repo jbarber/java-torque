@@ -1,0 +1,113 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>io.github.jbarber</groupId>
+  <artifactId>pbs</artifactId>
+  <packaging>nar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>Maven Quick Start</name>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <properties>
+    <swig.path>/usr/bin/swig</swig.path>
+    <swig.java.package>io.github.jbarber</swig.java.package>
+    <swig.source.directory>src/main</swig.source.directory>
+    <swig.java.directory>src/main/java</swig.java.directory>
+    <swig.c.directory>src/main/c</swig.c.directory>
+  </properties>
+  <build>
+    <defaultGoal>install</defaultGoal>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>com.github.maven-nar</groupId>
+          <artifactId>nar-maven-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-swig-plugin</artifactId>
+          <version>1.3.40-1-SNAPSHOT</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>1.7</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <mkdir dir="${swig.java.directory}" />
+                <mkdir dir="${swig.c.directory}" />
+                <exec executable="${swig.path}">
+                  <arg value="-java" />
+                  <arg value="-package" />
+                  <arg value="${swig.java.package}" />
+                  <arg value="-outdir" />
+                  <arg value="${swig.java.directory}" />
+                  <arg value="-module" />
+                  <arg value="${project.artifactId}" />
+                  <arg value="-o" />
+                  <arg value="${swig.c.directory}/${project.artifactId}_wrap.c" />
+                  <arg value="pbs.i" />
+                </exec>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.github.maven-nar</groupId>
+        <artifactId>nar-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <java>
+            <include>true</include>
+          </java>
+          <libraries>
+            <library>
+              <type>jni</type>
+              <narSystemPackage>io.github.jbarber</narSystemPackage>
+              <!--<linkCPP>false</linkCPP>-->
+            </library>
+          </libraries>
+          <linker>
+            <name>gcc</name>
+            <sysLibs>
+              <sysLib>
+                <name>torque</name>
+              </sysLib>
+            </sysLibs>
+          </linker>
+          <c>
+            <name>gcc</name>
+            <options>
+              <option>-I/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.60-2.4.4.1.fc20.x86_64/include</option>
+              <option>-I/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.60-2.4.4.1.fc20.x86_64/include/linux</option>
+            </options>
+            <includes>
+              <include>**/*.c</include>
+            </includes>
+          </c>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
