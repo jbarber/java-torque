@@ -1,6 +1,19 @@
-import io.github.jbarber.*;
+package io.github.jbarber;
 
-public class main {
+import org.junit.Assert;
+import org.junit.Test;
+
+public class TorqueTest {
+    @Test public final void testPbs_connect()
+        throws Exception
+    {
+        String server = "localhost";
+        NarSystem.loadLibrary();
+        int handle = pbs.pbs_connect(server);
+        Assert.assertEquals( 0, handle );
+    }
+
+    /*
     private static void printAttributes (Attrl attr) {
         Attrl next = attr;
         do {
@@ -29,6 +42,7 @@ public class main {
             server = argv[0];
         }
 
+        NarSystem.loadLibrary();
         System.out.println("Connecting to " + server);
         int handle = pbs.pbs_connect(server);
         if (handle < 0) {
@@ -80,4 +94,5 @@ public class main {
             pbs.pbs_disconnect(handle);
         }
     }
+*/
 }
