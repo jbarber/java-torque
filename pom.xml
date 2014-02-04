@@ -9,7 +9,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <version>4.7</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -78,14 +78,10 @@
         <version>3.0.0</version>
         <extensions>true</extensions>
         <configuration>
-          <java>
-            <include>true</include>
-          </java>
           <libraries>
             <library>
-              <type>jni</type>
               <narSystemPackage>io.github.jbarber</narSystemPackage>
-              <!--<linkCPP>false</linkCPP>-->
+              <linkCPP>false</linkCPP>
             </library>
           </libraries>
           <linker>
@@ -99,13 +95,18 @@
           <c>
             <name>gcc</name>
             <options>
-              <option>-I/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.60-2.4.4.1.fc20.x86_64/include</option>
-              <option>-I/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.60-2.4.4.1.fc20.x86_64/include/linux</option>
+              <option>-I${JAVA_HOME}/include</option>
+              <option>-I${JAVA_HOME}/include/linux</option>
             </options>
             <includes>
               <include>**/*.c</include>
             </includes>
           </c>
+          <!--<tests>
+            <test>
+              <name>TorqueTest</name>
+            </test>
+          </tests>-->
         </configuration>
       </plugin>
     </plugins>
